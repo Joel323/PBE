@@ -1,0 +1,26 @@
+box {
+    background: blue;
+    border-radius: 25px;
+
+}
+
+button {
+    margin-top: 25px;
+    background: #14edf5;
+    border-radius: 15px;
+}
+
+button:hover {
+    background: #99fbff;
+    border-radius: 25px;
+}
+
+button:active {
+    background: #1cb7bd;
+    border-radius: 25px;
+}
+
+
+
+
+
