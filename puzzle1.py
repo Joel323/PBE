@@ -1,7 +1,8 @@
 class Rfid:
 	def read_uid(self):
 		uid = int(input())
-		return hex(uid)
+		uidHex = hex(uid)
+		return uidHex.upper()
 
 if __name__ == "__main__":
 	rf = Rfid()
