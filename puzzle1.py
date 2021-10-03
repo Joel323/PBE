@@ -5,5 +5,6 @@ class Rfid:
 
 if __name__ == "__main__":
 	rf = Rfid()
-	uid = rf.read_uid()
-	print(uid)
+	while(1):
+		uid = rf.read_uid()
+		print(uid)
