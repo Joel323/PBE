@@ -10,7 +10,6 @@ class Rfid:
         uidUnformatted = str(uidHex)
         uidFormatted = self.format_string(uidUnformatted)
         uidFormatted.reverse() 
-        print(uidFormatted)
         
         return ("".join(uidFormatted)).upper()
      
