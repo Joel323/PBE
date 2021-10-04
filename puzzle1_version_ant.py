@@ -1,16 +1,17 @@
 class Rfid:
     def read_uid(self):       
         uidString = input()
-        uidBytes = bytearray(uidString,'utf-8')
-        print(uidBytes)
-        uidBytes.reverse()
-        print(uidBytes)
         uid = int(uidString)
-        uidHex = hex(uid)
-        return uidHex.upper()
+        uidHex = format(uid, 'x')
+        uidUnformatted = str(uidHex)
+        uidFormatted = self.format_string(uidUnformatted)
+        uidFormatted.reverse()
+        
+        return ("".join(uidFormatted)).upper()
      
     
-
+    def format_string(self, uidString):
+        return [uidString[i:i+2] for i in range(0, len(uidString), 2)]
         
 
 if __name__ == "__main__":
