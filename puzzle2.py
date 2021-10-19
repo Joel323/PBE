@@ -1,9 +1,11 @@
-import gi
+import gi, threading
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 class CustomWindow(Gtk.Window):
+    uid = ""
+    
     def __init__(self):
         super().__init__(title="RFID Reader")
         
@@ -16,38 +18,48 @@ class CustomWindow(Gtk.Window):
                                              Gtk.STYLE_PROVIDER_PRIORITY_USER)
         
         
-        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.add(box_outer)
+        self.label = Gtk.Label()
+        self.label.set_name("label1")
+        self.label.set_text("Please, login with your university card")
+        self.label.set_justify(Gtk.Justification.LEFT)
         
-        label = Gtk.Label()
-        label.set_text("Please, login with your university card")
-        label.set_justify(Gtk.Justification.LEFT)
-        
-        
-        listbox = Gtk.ListBox()
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        box_outer.pack_start(listbox, True, True, 0)
-        
-        row = Gtk.ListBoxRow()
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
-        vbox.pack_start(label, True, True, 0)
-        vbox.set_child_packing(label, 0, 0, 50, 0)
-        row.add(vbox)
-        listbox.add(row)
-        
-        row2 = Gtk.ListBoxRow()
-        self.button = Gtk.Button("Clear")
-        self.button.connect("clicked", self.on_button_clicked)
-        row2.add(self.button)
-        listbox.add(row2)
-        
-    def on_button_clicked(self, widget):
-        print("Hello World")
         
 
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.box.pack_start(self.label, True, True, 0)
+        #box_outer.pack_start(self.box, True, True, 0)
+        
+        outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.add(self.box)
+        self.eventBox = Gtk.EventBox()
+        self.button = Gtk.Button("Clear")
+        self.button.connect("clicked", self.on_button_clicked)
+        self.eventBox.add(self.button)
+        self.box.pack_start(self.eventBox, True, True, 0)
+        self.button.set_can_focus(False)
+
+        self.connect("key_press_event", self.my_keypress_function)
+
+
+    def on_button_clicked(self, widget):
+        self.box.set_name("box")
+        self.label.set_text("Please, login with your university card")
+        self.uid = ""
+    def my_keypress_function(self,widget, event):
+        self.set_default(None)
+        if(Gdk.keyval_name(event.keyval) == "Return"):
+            self.box.set_name("box2")
+            self.label.set_text("UID: " + self.uid)
+        else:
+            self.uid = self.uid + Gdk.keyval_name(event.keyval)
+        
+    	
         
 
 win = CustomWindow()
 win.connect("destroy", Gtk.main_quit)
+
+
+
 win.show_all()
 Gtk.main()

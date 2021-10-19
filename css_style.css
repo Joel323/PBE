@@ -4,6 +4,12 @@ box {
 
 }
 
+box#box2 {
+    background: yellow;
+    border-radius: 25px;
+
+}
+
 button {
     margin-top: 25px;
     background: #14edf5;
@@ -18,6 +24,10 @@ button:hover {
 button:active {
     background: #1cb7bd;
     border-radius: 25px;
+}
+
+label#label1{
+    padding: 25px;
 }
 
 
