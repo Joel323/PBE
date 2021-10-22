@@ -27,9 +27,7 @@ class CustomWindow(Gtk.Window):
 
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.box.pack_start(self.label, True, True, 0)
-        #box_outer.pack_start(self.box, True, True, 0)
         
-        outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(self.box)
         self.eventBox = Gtk.EventBox()
         self.button = Gtk.Button("Clear")
@@ -38,23 +36,25 @@ class CustomWindow(Gtk.Window):
         self.box.pack_start(self.eventBox, True, True, 0)
         self.button.set_can_focus(False)
 
-        self.connect("key_press_event", self.my_keypress_function)
+        self.connect("key_press_event", self.read_uid)
 
 
     def on_button_clicked(self, widget):
         self.box.set_name("box")
         self.label.set_text("Please, login with your university card")
-        self.uid = ""
-    def my_keypress_function(self,widget, event):
-        self.set_default(None)
+    def read_uid(self,widget, event):
         if(Gdk.keyval_name(event.keyval) == "Return"):
+            self.big_endian_to_little_endian_string()
             self.box.set_name("box2")
             self.label.set_text("UID: " + self.uid)
+            self.uid = ""
         else:
             self.uid = self.uid + Gdk.keyval_name(event.keyval)
         
-    	
-        
+    def big_endian_to_little_endian_string(self):
+        self.uid = int(self.uid)
+        self.uid = ((self.uid << 24) & 0xFF000000) |((self.uid << 8) & 0x00FF0000) | ((self.uid >> 8) & 0x0000FF00) |((self.uid >> 24) & 0x000000FF)
+        self.uid = (str(format(self.uid, 'x'))).upper()
 
 win = CustomWindow()
 win.connect("destroy", Gtk.main_quit)
