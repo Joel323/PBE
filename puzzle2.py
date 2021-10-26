@@ -1,4 +1,4 @@
-import gi, threading
+import gi, struct
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -53,7 +53,7 @@ class CustomWindow(Gtk.Window):
         
     def big_endian_to_little_endian_string(self):
         self.uid = int(self.uid)
-        self.uid = ((self.uid << 24) & 0xFF000000) |((self.uid << 8) & 0x00FF0000) | ((self.uid >> 8) & 0x0000FF00) |((self.uid >> 24) & 0x000000FF)
+        self.uid = struct.unpack("<I", struct.pack(">I", self.uid))[0]
         self.uid = (str(format(self.uid, 'x'))).upper()
 
 win = CustomWindow()
