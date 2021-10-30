@@ -4,23 +4,26 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 class CustomWindow(Gtk.Window):
-    uid = ""
     
-    def __init__(self):
-        super().__init__(title="RFID Reader")
+    def __init__(self, css_path, win_title, login_text):
+        super().__init__(title=win_title)
+        self.uid = ""
+        self.css_path = css_path
+        self.win_title = win_title
+        self.login_text = login_text
         
-        cssProvider = Gtk.CssProvider()
-        cssProvider.load_from_path("/home/pi/Desktop/PBE/css_style.css")
-        styleContext = Gtk.StyleContext()
-        styleContext.add_provider(cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_path(self.css_path)
+        style_context = Gtk.StyleContext()
+        style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
         Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
-                                             cssProvider,
+                                             css_provider,
                                              Gtk.STYLE_PROVIDER_PRIORITY_USER)
         
         
         self.label = Gtk.Label()
         self.label.set_name("label1")
-        self.label.set_text("Please, login with your university card")
+        self.label.set_text(self.login_text)
         self.label.set_justify(Gtk.Justification.LEFT)
         
         
@@ -41,7 +44,8 @@ class CustomWindow(Gtk.Window):
 
     def on_button_clicked(self, widget):
         self.box.set_name("box")
-        self.label.set_text("Please, login with your university card")
+        self.label.set_text(self.login_text)
+
     def read_uid(self,widget, event):
         if(Gdk.keyval_name(event.keyval) == "Return"):
             self.big_endian_to_little_endian_string()
@@ -56,7 +60,8 @@ class CustomWindow(Gtk.Window):
         self.uid = struct.unpack("<I", struct.pack(">I", self.uid))[0]
         self.uid = (str(format(self.uid, 'x'))).upper()
 
-win = CustomWindow()
+win = CustomWindow("/home/pi/Desktop/PBE/css_style.css", "Card reader",
+"Please, login with your university card")
 win.connect("destroy", Gtk.main_quit)
 
 
