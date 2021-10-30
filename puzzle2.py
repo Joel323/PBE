@@ -60,11 +60,10 @@ class CustomWindow(Gtk.Window):
         self.uid = struct.unpack("<I", struct.pack(">I", self.uid))[0]
         self.uid = (str(format(self.uid, 'x'))).upper()
 
-win = CustomWindow("/home/pi/Desktop/PBE/css_style.css", "Card reader",
-"Please, login with your university card")
-win.connect("destroy", Gtk.main_quit)
+if __name__ == '__main__':
+        win = CustomWindow("/home/pi/Desktop/PBE/css_style.css", "Card reader",
+        "Please, login with your university card")
+        win.connect("destroy", Gtk.main_quit)
 
-
-
-win.show_all()
-Gtk.main()
+        win.show_all()
+        Gtk.main()
